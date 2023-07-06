@@ -11,9 +11,10 @@ import org.junit.Test;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class CreateCourierTest {
+    private ApiCourier apiCourier;
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        apiCourier = new ApiCourier();
     }
     @Test
     @DisplayName("Create Courier")
