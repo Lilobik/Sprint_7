@@ -1,4 +1,6 @@
-public class CreateData {
+package courier;
+
+public class CourierData {
     public static String LOGIN_ONE = "logqatest_6565";
     public static String PASSWORD_ONE = "pass123";
     public static String FIRST_NAME_ONE = "Test";

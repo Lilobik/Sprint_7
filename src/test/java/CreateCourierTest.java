@@ -1,8 +1,9 @@
+import courier.CourierData;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.example.ApiCollection;
+import courier.ApiCourier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,22 +19,22 @@ public class CreateCourierTest {
     @DisplayName("Create Courier")
     @Description("Create Courier, 201")
     public void createCourierSuccess() {
-        Response response = ApiCollection.createCourier(CreateData.LOGIN_ONE,
-                CreateData.PASSWORD_ONE, CreateData.FIRST_NAME_ONE);
+        Response response = ApiCourier.createCourier(CourierData.LOGIN_ONE,
+                CourierData.PASSWORD_ONE, CourierData.FIRST_NAME_ONE);
 
-        response.then().assertThat().body("ok", equalTo(true))
+        response.then().statusCode(201)
                 .and()
-                .statusCode(201);
+                .assertThat().body("ok", equalTo(true));
         System.out.println(response.body().asString());
     }
     @Test
     @DisplayName("Create Courier Duplicate")
     @Description("Create Courier Duplicate, error 409")
     public void createCourierDuplicate() {
-        ApiCollection.createCourier(CreateData.LOGIN_TWO, CreateData.PASSWORD_TWO, CreateData.FIRST_NAME_TWO);
+        ApiCourier.createCourier(CourierData.LOGIN_TWO, CourierData.PASSWORD_TWO, CourierData.FIRST_NAME_TWO);
 
-        Response response = ApiCollection.createCourier(CreateData.LOGIN_TWO, CreateData.PASSWORD_TWO,
-                CreateData.FIRST_NAME_TWO);
+        Response response = ApiCourier.createCourier(CourierData.LOGIN_TWO, CourierData.PASSWORD_TWO,
+                CourierData.FIRST_NAME_TWO);
 
         response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
                 .and()
@@ -46,7 +47,7 @@ public class CreateCourierTest {
     @Description("Create Courier Incomplete Data,  error 400")
     public void createCourierIncompleteData() {
 
-        Response response = ApiCollection.createCourierWithoutPass(CreateData.FIRST_NAME_ONE);
+        Response response = ApiCourier.createCourierWithoutPass(CourierData.FIRST_NAME_ONE);
         response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
                 .and()
                 .statusCode(400);
@@ -55,8 +56,8 @@ public class CreateCourierTest {
     }
     @After
     public void cleanUp() {
-        int id = ApiCollection.getCourierId(CreateData.LOGIN_ONE, CreateData.PASSWORD_ONE);
-        ApiCollection.deleteCourier(id);
+        int id = ApiCourier.getCourierId(CourierData.LOGIN_ONE, CourierData.PASSWORD_ONE);
+        ApiCourier.deleteCourier(id);
     }
 
 }
